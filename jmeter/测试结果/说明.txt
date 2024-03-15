@@ -1,0 +1,5 @@
+测试方式：1s内发送完n个请求
+标准：90%请求在3s内响应
+
+embeddings模型为bge-large-zh-v1.5
+reranker模型为bge-reranker-base
