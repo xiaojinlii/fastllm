@@ -61,6 +61,37 @@ class LangchainReranker(BaseDocumentCompressor):
         top_k = self.top_n if self.top_n < len(ret_docs) else len(ret_docs)
         return ret_docs[:top_k]
 
+    async def acompress_documents(
+        self,
+        documents: Sequence[Document],
+        query: str,
+        callbacks: Optional[Callbacks] = None,
+    ) -> Sequence[Document]:
+        """Compress retrieved documents given the query context."""
+        if len(documents) == 0:  # to avoid empty api call
+            return []
+
+        doc_list = list(documents)
+        texts = [d.page_content for d in doc_list]
+
+        data = {
+            "query": query,
+            "texts": texts
+        }
+        url = f"{self.base_url}/worker_compute_score_by_query"
+        async with httpx.AsyncClient() as client:
+            response = await client.post(url, json=data)
+        results = response.json()
+
+        for index, value in enumerate(results):
+            doc = doc_list[index]
+            doc.metadata["relevance_score"] = value
+        doc_list.sort(key=lambda _doc: _doc.metadata["relevance_score"], reverse=True)
+        ret_docs = [d for d in doc_list if d.metadata["relevance_score"] > self.reranker_score]
+
+        top_k = self.top_n if self.top_n < len(ret_docs) else len(ret_docs)
+        return ret_docs[:top_k]
+
 
 if __name__ == "__main__":
     reranker_model = LangchainReranker(base_url="http://127.0.0.1:21021", top_n=3, reranker_score=0.7)
