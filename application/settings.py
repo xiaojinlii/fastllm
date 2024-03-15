@@ -11,8 +11,8 @@ DEBUG = False
 
 
 """项目配置"""
-TITLE = "FastAPI Framework"
-DESCRIPTION = "基于FastAPI的Web框架"
+TITLE = "Fast LLM"
+DESCRIPTION = "基于FastAPI提供大语言模型调用接口"
 VERSION = "0.0.1"
 
 
