@@ -68,4 +68,7 @@ EVENTS = [
     "extensions.mongodb.mongodb.connect_mongo" if MONGO_DB_ENABLE else None,
     "extensions.redis.redis.connect_redis" if REDIS_DB_ENABLE else None,
     "extensions.elasticsearch.elasticsearch.connect_elasticsearch" if ELASTICSEARCH_ENABLE else None,
+    "modules.fastllm.event.create_embeddings_worker" if EMBEDDINGS_ENABLED else None,
+    "modules.fastllm.event.create_reranker_worker" if RERANKER_ENABLED else None,
+    "modules.fastllm.event.create_torch_gc_task",
 ]

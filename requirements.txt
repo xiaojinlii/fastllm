@@ -6,3 +6,8 @@ orjson==3.9.15
 SQLAlchemy==2.0.25
 asyncmy==0.2.9
 aiosqlite==0.20.0
+
+# fastllm
+fschat[model_worker]==0.2.36
+sentence_transformers==2.3.1
+APScheduler==3.10.4
