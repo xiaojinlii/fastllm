@@ -117,15 +117,27 @@ if __name__ == "__main__":
     from modules.fastllm.model_loader.utils import detect_device
 
     worker = ModelWorker(
-        model_path=r"E:\WorkSpace\LLMWorkSpace\Models\LLM\Qwen-7B-Chat",
-        model_name="Qwen-7B-Chat",
+        model_path=r"E:\WorkSpace\LLMWorkSpace\Models\LLM\Qwen1.5-0.5B-Chat",
+        model_name="Qwen1.5-0.5B-Chat",
         device=detect_device(),
         num_gpus=1,
         max_gpu_memory=None
     )
 
     params = {
-        "prompt": "你是谁"
+        'model': 'Qwen1.5-0.5B-Chat',
+        'prompt': '<|im_start|>system\nYou are a helpful '
+                  'assistant.<|im_end|>\n<|im_start|>user\n你是谁<|im_end|>\n<|im_start|>assistant\n',
+        'temperature': 0.7,
+        'logprobs': None,
+        'top_p': 1.0,
+        'top_k': -1,
+        'presence_penalty': 0.0,
+        'frequency_penalty': 0.0,
+        'max_new_tokens': 8171,
+        'echo': False,
+        'stop_token_ids': [151643, 151644, 151645],
+        'stop': ['<|endoftext|>']
     }
 
     result = worker.generate_gate(params)
