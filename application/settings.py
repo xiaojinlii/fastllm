@@ -1,73 +1,61 @@
+"""
+FastAPI settings for project.
+"""
+
 import os
-from .configs import *
+from pathlib import Path
 
+# 项目根目录
+BASE_DIR = Path(__file__).resolve().parent.parent
 
-"""项目根目录"""
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-
-"""安全警告: 不要在生产中打开调试运行!"""
+# 注意：不要在生产中打开调试运行!
 DEBUG = False
 
-
-"""项目配置"""
+####################
+# PROJECT SETTINGS #
+####################
 TITLE = "Fast LLM"
-DESCRIPTION = "基于FastAPI提供大语言模型调用接口"
+DESCRIPTION = "基于 xiaoapi 提供大语言模型调用接口"
 VERSION = "0.0.1"
 
 
-"""
-临时文件目录
-TEMP_DIR：临时文件目录绝对路径
-"""
-TEMP_DIR = os.path.join(BASE_DIR, "temp")
+############
+# UVICORN #
+############
+# 监听主机IP，默认开放给本网络所有主机
+HOST = "0.0.0.0"
+# 监听端口
+PORT = 9000
+# 工作进程数
+WORKERS = 1
 
 
-"""
-挂载静态目录，并添加路由访问，此路由不会在接口文档中显示
-STATIC_ENABLE：是否启用静态目录访问
-STATIC_URL：路由访问
-STATIC_ROOT：静态文件目录绝对路径
-官方文档：https://fastapi.tiangolo.com/tutorial/static-files/
-"""
-STATIC_ENABLE = True
-STATIC_URL = "/static"
-STATIC_DIR = "static"
-STATIC_ROOT = os.path.join(BASE_DIR, STATIC_DIR)
+#######
+# LLM #
+#######
+EMBEDDINGS_ENABLED = True
+EMBEDDINGS_MODEL_NAME = "bge-large-zh-v1.5"
+EMBEDDINGS_MODEL_PATH = r"E:\WorkSpace\LLMWorkSpace\Models\Embedding\bge-large-zh-v1.5"
+RERANKER_ENABLED = True
+RERANKER_MODEL_NAME = "bge-reranker-base"
+RERANKER_MODEL_PATH = r"E:\WorkSpace\LLMWorkSpace\Models\reranker\bge-reranker-base"
 
 
-"""
-跨域解决
-详细解释：https://cloud.tencent.com/developer/article/1886114
-官方文档：https://fastapi.tiangolo.com/tutorial/cors/
-"""
-# 是否启用跨域
-CORS_ORIGIN_ENABLE = True
-# 只允许访问的域名列表，* 代表所有
-ALLOW_ORIGINS = ["*"]
-# 是否支持携带 cookie
-ALLOW_CREDENTIALS = True
-# 设置允许跨域的http方法，比如 get、post、put等。
-ALLOW_METHODS = ["*"]
-# 允许携带的headers，可以用来鉴别来源等作用。
-ALLOW_HEADERS = ["*"]
-
-
-"""
-中间件配置
-"""
+##############
+# MIDDLEWARE #
+##############
+# List of middleware to use. Order is important; in the request phase, these
+# middleware will be applied in the order given, and in the response
+# phase the middleware will be applied in reverse order.
 MIDDLEWARES = [
-    "middleware.request_log_middleware.register_request_log_middleware",
+    "xiaoapi.middleware.register_request_log_middleware",
 ]
 
 
-"""
-全局事件配置
-"""
+############
+# LIFESPAN #
+############
 EVENTS = [
-    "extensions.mongodb.mongodb.connect_mongo" if MONGO_DB_ENABLE else None,
-    "extensions.redis.redis.connect_redis" if REDIS_DB_ENABLE else None,
-    "extensions.elasticsearch.elasticsearch.connect_elasticsearch" if ELASTICSEARCH_ENABLE else None,
     "modules.fastllm.event.create_embeddings_worker" if EMBEDDINGS_ENABLED else None,
     "modules.fastllm.event.create_reranker_worker" if RERANKER_ENABLED else None,
     "modules.fastllm.event.create_torch_gc_task",

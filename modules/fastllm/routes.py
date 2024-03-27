@@ -3,7 +3,7 @@ from typing import List
 from fastapi import APIRouter, Depends, Request, Body
 from starlette.responses import JSONResponse
 
-from core.exception import CustomException
+from xiaoapi.core import CustomException
 from application.settings import EMBEDDINGS_ENABLED, RERANKER_ENABLED
 from modules.fastllm.model_loader.embeddings.embeddings_worker import EmbeddingsWorker
 from modules.fastllm.model_loader.reranker.reranker_worker import RerankerWorker

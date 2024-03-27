@@ -18,6 +18,8 @@ from fastchat.modules.xfastertransformer import XftConfig
 from fastchat.modules.gptq import GptqConfig
 from fastchat.utils import get_context_length
 
+from xiaoapi.core import logger
+
 
 class ModelWorker:
     def __init__(
@@ -41,7 +43,7 @@ class ModelWorker:
             debug: bool = False,
     ):
 
-        print(f"Loading the model {model_name} ...")
+        logger.info(f"Loading the chat model {model_name} ...")
         self.model, self.tokenizer = load_model(
             model_path,
             revision=revision,

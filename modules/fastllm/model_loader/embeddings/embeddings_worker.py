@@ -1,6 +1,6 @@
 from typing import List, Literal
 
-from core.logger import logger
+from xiaoapi.core import logger
 
 
 def encode_base64(embeddings: List[List[float]]) -> List[str]:
