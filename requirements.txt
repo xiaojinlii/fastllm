@@ -1,4 +1,4 @@
-xiaoapi
+xiaoapi>=0.0.2
 
 # fastllm
 fschat[model_worker]==0.2.36
